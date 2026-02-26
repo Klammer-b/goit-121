@@ -7,6 +7,7 @@ import { ENV_VARS } from './constants/env.js';
 import { notFoundMiddleware } from './middlewares/notFoundMiddleware.js';
 import { errorHandlerMiddleware } from './middlewares/errorHandlerMiddleware.js';
 import router from './routes/index.js';
+import { errors } from 'celebrate';
 
 export const startServer = () => {
   const app = express();
@@ -21,6 +22,8 @@ export const startServer = () => {
   app.use(router);
 
   app.use(notFoundMiddleware);
+
+  app.use(errors());
 
   app.use(errorHandlerMiddleware);
 
