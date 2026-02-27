@@ -1,9 +1,10 @@
 import mongoose from 'mongoose';
 import { getEnv } from '../helpers/getEnv.js';
 import { ENV_VARS } from '../constants/env.js';
+import { Student } from './models/student.js';
 
 const clientOptions = {
-  serverApi: { version: '1', strict: true, deprecationErrors: true },
+  serverApi: { version: '1', strict: false, deprecationErrors: true },
 };
 
 export async function connectToMongoDB() {
@@ -17,6 +18,7 @@ export async function connectToMongoDB() {
 
     await mongoose.connect(uri, clientOptions);
     await mongoose.connection.db.admin().command({ ping: 1 });
+    await mongoose.syncIndexes();
     console.log(
       'Pinged your deployment. You successfully connected to MongoDB!',
     );

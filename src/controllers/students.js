@@ -7,7 +7,22 @@ import {
 } from '../services/students.js';
 
 export const getStudentsController = async (req, res) => {
-  const students = await getStudents();
+  const { query } = req;
+  const students = await getStudents({
+    page: query.page,
+    perPage: query.perPage,
+    sortOrder: query.sortOrder,
+    sortBy: query.sortBy,
+    filters: {
+      minAge: query.minAge,
+      maxAge: query.maxAge,
+      minAvgMark: query.minAvgMark,
+      maxAvgMark: query.maxAvgMark,
+      gender: query.gender,
+      onDuty: query.onDuty,
+    },
+    search: query.search,
+  });
 
   res.json({
     status: 200,

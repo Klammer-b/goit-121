@@ -12,4 +12,6 @@ const studentSchema = new Schema(
   { timestamps: true, versionKey: false },
 );
 
+studentSchema.index({ name: 'text' });
+
 export const Student = model('students', studentSchema);

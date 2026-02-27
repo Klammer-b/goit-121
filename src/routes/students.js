@@ -11,6 +11,7 @@ import { createStudentValidationSchema } from '../validation/createStudentValida
 import { studentIdValidationSchema } from '../validation/studentIdValidationSchema.js';
 import { updateStudentValidationSchema } from '../validation/updateStudentValidationSchema.js';
 import { VALIDATION_OPTIONS } from '../constants/validationOptions.js';
+import { getStudentsValidationSchema } from '../validation/getStudentsValidtionSchema.js';
 
 const studentsRouter = Router();
 
@@ -19,7 +20,11 @@ studentsRouter.use(
   celebrate(studentIdValidationSchema),
 );
 
-studentsRouter.get('/students', getStudentsController);
+studentsRouter.get(
+  '/students',
+  celebrate(getStudentsValidationSchema),
+  getStudentsController,
+);
 
 studentsRouter.get('/students/:studentId', getStudentByIdController);
 
