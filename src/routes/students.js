@@ -6,16 +6,39 @@ import {
   getStudentsController,
   updateStudentByIdController,
 } from '../controllers/students.js';
+import { celebrate } from 'celebrate';
+import { createStudentValidationSchema } from '../validation/createStudentValidationSchema.js';
+import { studentIdValidationSchema } from '../validation/studentIdValidationSchema.js';
+import { updateStudentValidationSchema } from '../validation/updateStudentValidationSchema.js';
+import { VALIDATION_OPTIONS } from '../constants/validationOptions.js';
+import { getStudentsValidationSchema } from '../validation/getStudentsValidtionSchema.js';
 
 const studentsRouter = Router();
 
-studentsRouter.get('/students', getStudentsController);
+studentsRouter.use(
+  '/students/:studentId',
+  celebrate(studentIdValidationSchema),
+);
+
+studentsRouter.get(
+  '/students',
+  celebrate(getStudentsValidationSchema),
+  getStudentsController,
+);
 
 studentsRouter.get('/students/:studentId', getStudentByIdController);
 
-studentsRouter.post('/students', createStudentController);
+studentsRouter.post(
+  '/students',
+  celebrate(createStudentValidationSchema, VALIDATION_OPTIONS),
+  createStudentController,
+);
 
-studentsRouter.patch('/students/:studentId', updateStudentByIdController);
+studentsRouter.patch(
+  '/students/:studentId',
+  celebrate(updateStudentValidationSchema, VALIDATION_OPTIONS),
+  updateStudentByIdController,
+);
 
 studentsRouter.delete('/students/:studentId', deleteStudentByIdController);
 
