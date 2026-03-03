@@ -8,6 +8,7 @@ import {
 
 export const getStudentsController = async (req, res) => {
   const { query } = req;
+
   const students = await getStudents({
     page: query.page,
     perPage: query.perPage,
