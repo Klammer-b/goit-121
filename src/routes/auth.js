@@ -2,6 +2,7 @@ import { Router } from 'express';
 import {
   loginUserController,
   logoutUserController,
+  refreshSessionController,
   registerUserController,
 } from '../controllers/auth.js';
 import { celebrate } from 'celebrate';
@@ -22,5 +23,7 @@ authRouter.post(
   loginUserController,
 );
 authRouter.post('/auth/logout', logoutUserController);
+
+authRouter.post('/auth/refresh-session', refreshSessionController);
 
 export default authRouter;
