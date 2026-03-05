@@ -21,6 +21,7 @@ export const getStudentsController = async (req, res) => {
       maxAvgMark: query.maxAvgMark,
       gender: query.gender,
       onDuty: query.onDuty,
+      userId: req.user._id,
     },
     search: query.search,
   });
@@ -34,7 +35,7 @@ export const getStudentsController = async (req, res) => {
 
 export const getStudentByIdController = async (req, res) => {
   const { studentId } = req.params;
-  const student = await getStudentById(studentId);
+  const student = await getStudentById(studentId, req.user._id);
 
   if (!student) {
     return res.status(404).json({
@@ -52,7 +53,10 @@ export const getStudentByIdController = async (req, res) => {
 };
 
 export const createStudentController = async (req, res) => {
-  const student = await createStudent(req.body);
+  const student = await createStudent({
+    ...req.body,
+    parentId: req.body.parentId ?? req.user._id,
+  });
 
   res.status(201).send({
     status: 201,
@@ -63,7 +67,15 @@ export const createStudentController = async (req, res) => {
 
 export const updateStudentByIdController = async (req, res) => {
   const { studentId } = req.params;
-  const student = await updateStudentById(studentId, req.body);
+  const student = await updateStudentById(studentId, req.user._id, req.body);
+
+  if (!student) {
+    return res.status(404).json({
+      status: 404,
+      message: 'NotFound',
+      text: `Student with id ${studentId} not found!`,
+    });
+  }
 
   res.send({
     status: 200,
@@ -74,7 +86,7 @@ export const updateStudentByIdController = async (req, res) => {
 
 export const deleteStudentByIdController = async (req, res) => {
   const { studentId } = req.params;
-  await deleteStudentById(studentId);
+  await deleteStudentById(studentId, req.user._id);
 
   res.status(204).send();
 };

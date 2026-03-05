@@ -42,6 +42,10 @@ export const getStudents = async ({
     studentsFilters.where('onDuty').equals(filters.onDuty);
   }
 
+  if (filters.userId) {
+    studentsFilters.where('parent').equals(filters.userId);
+  }
+
   if (search) {
     studentsFilters.where({ $text: { $search: search } });
   }
@@ -52,7 +56,8 @@ export const getStudents = async ({
     .limit(perPage)
     .sort({
       [sortBy]: sortOrder,
-    });
+    })
+    .populate('parent');
 
   const studentsCount = await Student.find()
     .merge(studentsFilters)
@@ -77,26 +82,30 @@ export const getStudents = async ({
   };
 };
 
-export const getStudentById = async (studentId) => {
-  const student = await Student.findById(studentId);
+export const getStudentById = async (studentId, parentId) => {
+  const student = await Student.findOne({ _id: studentId, parent: parentId });
 
   return student;
 };
 
-export const createStudent = async (payload) => {
-  const student = await Student.create(payload);
+export const createStudent = async ({ parentId, ...payload }) => {
+  const student = await Student.create({ ...payload, parent: parentId });
 
   return student;
 };
 
-export const updateStudentById = async (studentId, payload) => {
-  const student = await Student.findByIdAndUpdate(studentId, payload, {
-    returnDocument: 'after',
-  });
+export const updateStudentById = async (studentId, parentId, payload) => {
+  const student = await Student.findOneAndUpdate(
+    { _id: studentId, parent: parentId },
+    payload,
+    {
+      returnDocument: 'after',
+    },
+  );
 
   return student;
 };
 
-export const deleteStudentById = async (studentId) => {
-  await Student.findByIdAndDelete(studentId);
+export const deleteStudentById = async (studentId, parentId) => {
+  await Student.findOneAndDelete({ _id: studentId, parent: parentId });
 };

@@ -45,7 +45,7 @@ export const loginUser = async ({ email, password }) => {
     refreshToken: crypto.randomBytes(30).toString('base64'),
     accessTokenValidUntil: new Date(Date.now() + 1000 * 60 * 15), //15 min
     refreshTokenValidUntil: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30), //30 days
-    userId: existingUser._id,
+    user: existingUser._id,
   });
 
   return session;
