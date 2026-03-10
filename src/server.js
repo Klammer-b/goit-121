@@ -8,11 +8,12 @@ import { notFoundMiddleware } from './middlewares/notFoundMiddleware.js';
 import { errorHandlerMiddleware } from './middlewares/errorHandlerMiddleware.js';
 import router from './routes/index.js';
 import { errors } from 'celebrate';
+import cookieParser from 'cookie-parser';
 
 export const startServer = () => {
   const app = express();
 
-  app.use(cors());
+  app.use(cors(), cookieParser());
   app.use(
     express.json({
       type: ['application/json', 'application/vnd.api+json'],

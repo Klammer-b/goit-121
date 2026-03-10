@@ -3,6 +3,7 @@ import {
   ageValidator,
   avgMarkValidator,
   genderValidator,
+  mongoIdValidator,
   nameValidator,
   onDutyValidator,
 } from './sharedValidators.js';
@@ -14,5 +15,6 @@ export const createStudentValidationSchema = {
     gender: genderValidator.required(),
     avgMark: avgMarkValidator.required(),
     onDuty: onDutyValidator,
+    parentId: mongoIdValidator,
   }),
 };
