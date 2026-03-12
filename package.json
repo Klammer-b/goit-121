@@ -20,6 +20,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "celebrate": "^15.0.3",
+    "cloudinary": "^2.9.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
@@ -28,6 +29,7 @@
     "http-errors": "^2.0.1",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.2.1",
+    "multer": "^2.1.1",
     "nodemailer": "^8.0.2"
   }
 }

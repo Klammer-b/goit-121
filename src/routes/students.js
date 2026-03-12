@@ -5,6 +5,7 @@ import {
   getStudentByIdController,
   getStudentsController,
   updateStudentByIdController,
+  uploadAvatarController,
 } from '../controllers/students.js';
 import { celebrate } from 'celebrate';
 import { createStudentValidationSchema } from '../validation/createStudentValidationSchema.js';
@@ -13,6 +14,7 @@ import { updateStudentValidationSchema } from '../validation/updateStudentValida
 import { VALIDATION_OPTIONS } from '../constants/validationOptions.js';
 import { getStudentsValidationSchema } from '../validation/getStudentsValidationSchema.js';
 import { authenticate } from '../middlewares/authenticate.js';
+import { upload } from '../middlewares/multer.js';
 
 const studentsRouter = Router();
 
@@ -35,6 +37,12 @@ studentsRouter.post(
   '/students',
   celebrate(createStudentValidationSchema, VALIDATION_OPTIONS),
   createStudentController,
+);
+
+studentsRouter.post(
+  '/students/:studentId/upload-avatar',
+  upload.single('avatar'),
+  uploadAvatarController,
 );
 
 studentsRouter.patch(

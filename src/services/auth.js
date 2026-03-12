@@ -50,7 +50,7 @@ export const loginUser = async ({ email, password }) => {
     throw createHttpError(400, 'Email and password are invalid!');
   }
 
-  await Session.findOneAndDelete({ userId: existingUser._id });
+  await Session.findOneAndDelete({ user: existingUser._id });
 
   const session = await Session.create(createSession(existingUser._id));
 
