@@ -7,6 +7,7 @@ import {
 } from '../constants/getStudentsDefaultQueryParams.js';
 import { Student } from '../db/models/student.js';
 import { buildPaginationOptions } from '../helpers/paginationUtils.js';
+import { saveFile } from './file.js';
 
 export const getStudents = async ({
   page = DEFAULT_PAGE,
@@ -90,6 +91,20 @@ export const getStudentById = async (studentId, parentId) => {
 
 export const createStudent = async ({ parentId, ...payload }) => {
   const student = await Student.create({ ...payload, parent: parentId });
+
+  return student;
+};
+
+export const uploadStudentsAvatar = async (studentId, avatar) => {
+  const student = await Student.findById(studentId);
+
+  if (!student) return;
+
+  const avatarUrl = await saveFile(avatar);
+
+  student.avatarUrl = avatarUrl;
+
+  await student.save();
 
   return student;
 };

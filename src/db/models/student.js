@@ -10,6 +10,7 @@ const studentSchema = new Schema(
     avgMark: { type: Number, required: true },
     onDuty: { type: Boolean, default: true },
     parent: { type: Types.ObjectId, required: true, ref: User },
+    avatarUrl: { type: String, default: null },
   },
   { timestamps: true, versionKey: false },
 );

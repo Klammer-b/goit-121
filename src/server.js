@@ -9,6 +9,7 @@ import { errorHandlerMiddleware } from './middlewares/errorHandlerMiddleware.js'
 import router from './routes/index.js';
 import { errors } from 'celebrate';
 import cookieParser from 'cookie-parser';
+import { UPLOADS_DIR } from './constants/paths.js';
 
 export const startServer = () => {
   const app = express();
@@ -21,6 +22,8 @@ export const startServer = () => {
   );
 
   app.use(router);
+
+  app.use('/uploads', express.static(UPLOADS_DIR));
 
   app.use(notFoundMiddleware);
 

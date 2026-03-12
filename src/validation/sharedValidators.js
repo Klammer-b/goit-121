@@ -27,3 +27,9 @@ export const mongoIdValidator = Joi.string()
   .message({
     'mongoId.invalid': '"{#value}" must be a valid mongo id!',
   });
+
+export const emailValidator = Joi.string().email();
+
+export const passwordValidator = Joi.string().regex(
+  /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+[\]{}|\\:;"'<>,.?~`-]).{8,}$/,
+);

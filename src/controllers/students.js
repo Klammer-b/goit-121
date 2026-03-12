@@ -4,6 +4,7 @@ import {
   getStudentById,
   getStudents,
   updateStudentById,
+  uploadStudentsAvatar,
 } from '../services/students.js';
 
 export const getStudentsController = async (req, res) => {
@@ -58,9 +59,29 @@ export const createStudentController = async (req, res) => {
     parentId: req.body.parentId ?? req.user._id,
   });
 
-  res.status(201).send({
+  res.status(201).json({
     status: 201,
     message: `Successfully created a student!`,
+    data: student,
+  });
+};
+
+export const uploadAvatarController = async (req, res) => {
+  const studentId = req.params.studentId;
+
+  const student = await uploadStudentsAvatar(studentId, req.file);
+
+  if (!student) {
+    return res.status(404).json({
+      status: 404,
+      message: 'NotFound',
+      text: `Student with id ${studentId} not found!`,
+    });
+  }
+
+  res.json({
+    status: 200,
+    message: `Successfully update avatar for user with id ${studentId}`,
     data: student,
   });
 };
