@@ -1,8 +1,12 @@
 import createHttpError from 'http-errors';
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import { User } from '../db/models/user.js';
 import { Session } from '../db/models/session.js';
+import { sendResetPasswordEmail } from './email.js';
+import { getEnv } from '../helpers/getEnv.js';
+import { ENV_VARS } from '../constants/env.js';
 
 const createSession = (userId) => ({
   accessToken: crypto.randomBytes(30).toString('base64'),
@@ -80,4 +84,58 @@ export const refreshSession = async (sessionId, refreshToken) => {
   const newSession = await Session.create(createSession(user._id));
 
   return newSession;
+};
+
+export const requestResetPasswordEmail = async (email) => {
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    return;
+  }
+
+  const token = jwt.sign(
+    {
+      sub: user._id,
+      email: user.email,
+    },
+    getEnv(ENV_VARS.JWT_SECRET),
+    {
+      expiresIn: '15m',
+    },
+  );
+
+  await sendResetPasswordEmail({
+    email,
+    payload: {
+      userName: user.username,
+      resetUrl: `${getEnv(ENV_VARS.FRONTEND_DOMAIN)}/auth/reset-password?token=${token}`,
+    },
+  });
+};
+
+export const resetPassword = async ({ token, password }) => {
+  let payload;
+
+  try {
+    payload = jwt.verify(token, getEnv(ENV_VARS.JWT_SECRET));
+  } catch (err) {
+    console.log(err);
+
+    throw createHttpError(401, err.message);
+  }
+
+  const user = await User.findOne({
+    _id: payload.sub,
+    email: payload.email,
+  });
+
+  if (!user) {
+    throw createHttpError(401, 'Unauthorized');
+  }
+
+  await User.findByIdAndUpdate(user._id, {
+    password: await bcrypt.hash(password, 10),
+  });
+
+  await Session.findOneAndDelete({ userId: user._id });
 };

@@ -11,7 +11,7 @@ import { createStudentValidationSchema } from '../validation/createStudentValida
 import { studentIdValidationSchema } from '../validation/studentIdValidationSchema.js';
 import { updateStudentValidationSchema } from '../validation/updateStudentValidationSchema.js';
 import { VALIDATION_OPTIONS } from '../constants/validationOptions.js';
-import { getStudentsValidationSchema } from '../validation/getStudentsValidtionSchema.js';
+import { getStudentsValidationSchema } from '../validation/getStudentsValidationSchema.js';
 import { authenticate } from '../middlewares/authenticate.js';
 
 const studentsRouter = Router();

@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { getEnv } from '../helpers/getEnv.js';
 import { ENV_VARS } from '../constants/env.js';
-import { Student } from './models/student.js';
 
 const clientOptions = {
   serverApi: { version: '1', strict: false, deprecationErrors: true },
